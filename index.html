@@ -1,100 +1,386 @@
 <!DOCTYPE html>
 <html>
-    <head>
-        <title>太空侵略者</title>
-        <link rel="stylesheet" type="text/css" href="css/core.css">
-        <link rel="stylesheet" type="text/css" href="css/typeography.css">
-        <style>
-    
-            /* Styling needed for a fullscreen canvas and no scrollbars. */
-            body, html { 
+<head>
+    <title>太空侵略者</title>
+    <link rel="stylesheet" type="text/css" href="css/core.css">
+    <link rel="stylesheet" type="text/css" href="css/typeography.css">
+    <style>
+
+        /* Styling needed for a fullscreen canvas and no scrollbars. */
+        body, html {
             width: 100%;
             height: 100%;
             margin: 0;
             padding: 0;
             overflow: hidden;
-            }
+        }
 
-            #starfield {
-                width:100%;
-                height:100%;
-                z-index: -1;
-                position: absolute;
-                left: 0px;
-                top: 0px;
-            }
-            #gamecontainer {
-                width: 800px;
-                margin-left: auto;
-                margin-right: auto;
-            }
-            #gamecanvas { 
-                width: 800px;
-                height: 600px;
-            }
-            #info {
-                width: 800px;
-                margin-left: auto;
-                margin-right: auto;
-                text-align: center;
-            }
-        </style>
-    </head>
-    <body>
-        <div id="starfield"></div>
-        <div id="gamecontainer">
-        <canvas id="gameCanvas"></canvas>
-        </div>
-        <div id="info">
-            <p>使用方向键移动,空格发射. 每升一级侵略者和炸弹速度会越来越快</p>
-            <p><a id="muteLink" href="#" onclick="toggleMute()">mute</a> |
-        </div>
+        #starfield {
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+            position: absolute;
+            left: 0px;
+            top: 0px;
+        }
 
-        <script src="js/starfield.js"></script>
-        <script src="js/spaceinvaders.js"></script>
-        <script>
+        #gamecontainer {
+            width: 800px;
+            margin-left: auto;
+            margin-right: auto;
+        }
 
-            //  Create the starfield.
-            var container = document.getElementById('starfield');
-            var starfield = new Starfield();
-            starfield.initialise(container);
-            starfield.start();
+        #gamecanvas {
+            width: 800px;
+            height: 600px;
+        }
 
-            //  Setup the canvas.
-            var canvas = document.getElementById("gameCanvas");
-            canvas.width = 800;
-            canvas.height = 600;
+        #info {
+            width: 800px;
+            margin-left: auto;
+            margin-right: auto;
+            text-align: center;
+        }
 
-            //  Create the game.
-            var game = new Game();
+        .score-container {
+            position: absolute;
+            top: 50px;
+            z-index: 2;
+            left: 50%;
+            transform: translateX(400px);
+            padding: 30px 30px;
+            color: #ffffff;
+            background: #333333;
+            opacity: 0.85;
+            border-radius: 5px;
+            height: 500px;
+            max-height: 500px;
+            overflow: scroll;
+            max-width: 300px;
+        }
 
-            //  Initialise it with the game canvas.
-            game.initialise(canvas);
+        .rank li {
+            list-style: none;
+        }
 
-            //  Start the game.
-            game.start();
-            game.over = function () {
-                console.log('game over 22222');
-            }
+        .rank li p {
+            padding: 5px 0;
+        }
 
-            //  Listen for keyboard events.
-            window.addEventListener("keydown", function keydown(e) {
-                var keycode = e.which || window.event.keycode;
-                //  Supress further processing of left/right/space (37/29/32)
-                if(keycode == 37 || keycode == 39 || keycode == 32) {
-                    e.preventDefault();
-                }
-                game.keyDown(keycode);
-            });
-            window.addEventListener("keyup", function keydown(e) {
-                var keycode = e.which || window.event.keycode;
-                game.keyUp(keycode);
-            });
+        .score {
+            display: inline-block;
+            width: 60px;
+        }
 
-            function toggleMute() {
-                game.mute();
-                document.getElementById("muteLink").innerText = game.sounds.mute ? "unmute" : "mute";
-            }
-        </script>
-    </body>
+        .username {
+            display: inline-block;
+            width: 120px;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+            vertical-align: bottom;
+        }
+
+        .level {
+            display: inline-block;
+            width: 60px;
+        }
+
+        #nameChange {
+            display: none;
+        }
+
+        .user {
+            cursor: pointer;
+        }
+
+    </style>
+</head>
+<body>
+<div id="starfield"></div>
+<div id="gamecontainer">
+    <canvas id="gameCanvas"></canvas>
+</div>
+<div id="info">
+    <p>使用方向键移动,空格发射. 每升一级侵略者和炸弹速度会越来越快</p>
+    <p><a id="muteLink" href="#" onclick="toggleMute()">mute</a> |
+</div>
+<div class="score-container">
+    <h3>
+        <span class="user">
+            xxxx
+        </span>
+        <p id="nameChange">
+            <input type="text" id="username" name="username"/>
+            <button id="nameBtn">确定</button>
+            <button id="cancelBtn">取消</button>
+        </p>
+
+    </h3>
+    <p>最佳排名：</p>
+    <ul class="rank">
+        <li>
+            <p>
+                <span class="username">用户1xxxfsadfasfasfasfsdfxxxxxxxxxx</span>
+                <span class="score">600分</span>
+                <span class="level">level 3</span>
+            </p>
+        </li>
+        <li>
+            <p>
+                <span class="username">用户1xxxfsadfasfasfasfsdfxxxxxxxxxx</span>
+                <span class="score">600分</span>
+                <span class="level">level 3</span>
+            </p>
+        </li>
+        <li>
+            <p>
+                <span>用户1</span>
+                <span class="score">600分</span>
+                <span>level 3</span>
+            </p>
+        </li>
+        <li>
+            <p>
+                <span>用户1</span>
+                <span class="score">600分</span>
+                <span>level 3</span>
+            </p>
+        </li>
+        <li>
+            <p>
+                <span>用户1</span>
+                <span class="score">600分</span>
+                <span>level 3</span>
+            </p>
+        </li>
+        <li>
+            <p>
+                <span>用户1</span>
+                <span class="score">600分</span>
+                <span>level 3</span>
+            </p>
+        </li>
+        <li>
+            <p>
+                <span>用户1</span>
+                <span class="score">600分</span>
+                <span>level 3</span>
+            </p>
+        </li>
+        <li>
+            <p>
+                <span>用户1</span>
+                <span class="score">600分</span>
+                <span>level 3</span>
+            </p>
+        </li>
+        <li>
+            <p>
+                <span>用户1</span>
+                <span class="score">600分</span>
+                <span>level 3</span>
+            </p>
+        </li>
+        <li>
+            <p>
+                <span>用户1</span>
+                <span class="score">600分</span>
+                <span>level 3</span>
+            </p>
+        </li>
+        <li>
+            <p>
+                <span>用户1</span>
+                <span class="score">600分</span>
+                <span>level 3</span>
+            </p>
+        </li>
+        <li>
+            <p>
+                <span>用户1</span>
+                <span class="score">600分</span>
+                <span>level 3</span>
+            </p>
+        </li>
+        <li>
+            <p>
+                <span>用户1</span>
+                <span class="score">600分</span>
+                <span>level 3</span>
+            </p>
+        </li>
+        <li>
+            <p>
+                <span>用户1</span>
+                <span class="score">600分</span>
+                <span>level 3</span>
+            </p>
+        </li>
+        <li>
+            <p>
+                <span>用户1</span>
+                <span class="score">600分</span>
+                <span>level 3</span>
+            </p>
+        </li>
+        <li>
+            <p>
+                <span>用户1</span>
+                <span class="score">600分</span>
+                <span>level 3</span>
+            </p>
+        </li>
+        <li>
+            <p>
+                <span>用户1</span>
+                <span class="score">600分</span>
+                <span>level 3</span>
+            </p>
+        </li>
+        <li>
+            <p>
+                <span>用户1</span>
+                <span class="score">600分</span>
+                <span>level 3</span>
+            </p>
+        </li>
+        <li>
+            <p>
+                <span>用户1</span>
+                <span class="score">600分</span>
+                <span>level 3</span>
+            </p>
+        </li>
+        <li>
+            <p>
+                <span>用户1</span>
+                <span class="score">600分</span>
+                <span>level 3</span>
+            </p>
+        </li>
+        <li>
+            <p>
+                <span>用户1</span>
+                <span class="score">600分</span>
+                <span>level 3</span>
+            </p>
+        </li>
+        <li>
+            <p>
+                <span>用户1</span>
+                <span class="score">600分</span>
+                <span>level 3</span>
+            </p>
+        </li>
+        <li>
+            <p>
+                <span>用户1</span>
+                <span class="score">600分</span>
+                <span>level 3</span>
+            </p>
+        </li>
+        <li>
+            <p>
+                <span>用户1</span>
+                <span class="score">600分</span>
+                <span>level 3</span>
+            </p>
+        </li>
+        <li>
+            <p>
+                <span>用户1</span>
+                <span class="score">600分</span>
+                <span>level 3</span>
+            </p>
+        </li>
+        <li>
+            <p>
+                <span>用户1</span>
+                <span class="score">600分</span>
+                <span>level 3</span>
+            </p>
+        </li>
+        <li>
+            <p>
+                <span>用户1</span>
+                <span class="score">600分</span>
+                <span>level 3</span>
+            </p>
+        </li>
+        <li>
+            <p>
+                <span>用户1</span>
+                <span class="score">600分</span>
+                <span>level 3</span>
+            </p>
+        </li>
+        <li>
+            <p>
+                <span>用户1</span>
+                <span class="score">600分</span>
+                <span>level 3</span>
+            </p>
+        </li>
+
+
+    </ul>
+</div>
+
+<script src="js/starfield.js"></script>
+<script src="js/spaceinvaders.js"></script>
+<script>
+
+    //  Create the starfield.
+    var container = document.getElementById('starfield');
+    var starfield = new Starfield();
+    starfield.initialise(container);
+    starfield.start();
+
+    //  Setup the canvas.
+    var canvas = document.getElementById("gameCanvas");
+    canvas.width = 800;
+    canvas.height = 600;
+
+    //  Create the game.
+    var game = new Game();
+
+    //  Initialise it with the game canvas.
+    game.initialise(canvas);
+
+    //  Start the game.
+    game.start();
+    game.over = function () {
+        console.log('game over 22222');
+    }
+
+    //  Listen for keyboard events.
+    window.addEventListener("keydown", function keydown(e) {
+        var keycode = e.which || window.event.keycode;
+        //  Supress further processing of left/right/space (37/29/32)
+        if (keycode == 37 || keycode == 39 || keycode == 32) {
+            e.preventDefault();
+        }
+        game.keyDown(keycode);
+    });
+    window.addEventListener("keyup", function keydown(e) {
+        var keycode = e.which || window.event.keycode;
+        game.keyUp(keycode);
+    });
+
+    function toggleMute() {
+        game.mute();
+        document.getElementById("muteLink").innerText = game.sounds.mute ? "unmute" : "mute";
+    }
+
+    document.querySelector(".user").addEventListener('click', function () {
+        this.style.display = 'none';
+        document.getElementById("nameChange").style.display = "block";
+    })
+    document.getElementById("cancelBtn").addEventListener('click', function () {
+        document.getElementById("nameChange").style.display = "none";
+        document.querySelector(".user").style.display = "block";
+    })
+</script>
+</body>
 </html>
