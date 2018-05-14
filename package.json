@@ -1,0 +1,11 @@
+{
+  "name": "spaceinvaders",
+  "version": "1.0.0",
+  "description": "基于区块链的太空侵略者游戏",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "rhain",
+  "license": "MIT"
+}
