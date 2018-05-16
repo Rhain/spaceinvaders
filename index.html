@@ -50,13 +50,13 @@
             left: 50%;
             transform: translateX(400px);
             padding: 30px 30px;
-            color: #ffffff;
+            color: #a0a0a0;
             background: #333333;
-            opacity: 0.85;
+            opacity: 0.9;
             border-radius: 5px;
             height: 500px;
             max-height: 500px;
-            overflow: scroll;
+            overflow-y: scroll;
             max-width: 300px;
             width: 300px;
         }
@@ -83,6 +83,10 @@
             vertical-align: bottom;
         }
 
+        #username {
+            padding: 5px 0 5px 10px;
+        }
+
         .level {
             display: inline-block;
             width: 60px;
@@ -94,23 +98,43 @@
 
         .user {
             cursor: pointer;
+            color: #ffffff;
         }
 
         .highestScore {
             font-size: 16px;
             font-weight: normal;
+            color: #ffffff;
             margin-left: 20px;
         }
-        .first{
-            color: rgb(218,178,115 );
-        }
-        .second{
-            color: rgb(233,233,216 );
-        }
-        .third{
-            color: rgb(186,110,64);
+
+        .first {
+            color: rgb(218, 178, 115);
         }
 
+        .second {
+            color: rgb(233, 233, 216);
+        }
+
+        .third {
+            color: rgb(186, 110, 64);
+        }
+
+        .tips{
+            position: absolute;
+            color: #7bd075;
+            top: 15px;
+            display: none;
+        }
+
+        .nets{
+            position: absolute;
+            top: 20px;
+            right: 100px;
+        }
+        #net{
+            padding: 3px 10px;
+        }
     </style>
 </head>
 <body>
@@ -119,10 +143,21 @@
     <canvas id="gameCanvas"></canvas>
 </div>
 <div id="info">
-    <p>使用方向键移动,空格发射. 每升一级侵略者和炸弹速度会越来越快</p>
-    <p><a id="muteLink" href="#" onclick="toggleMute()">mute</a> |
+    <p>使用方向键移动,按空格键发射. 每升一级炸弹速度会越来越快</p>
+    <p><a id="muteLink" href="#" onclick="toggleMute()">静音</a>
+    <p>联系我：QQ：3326712209</p>
+</div>
+
+<div class="nets">
+    <select name="net" id="net" onchange="chooseNet()">
+        <option value="1">主网</option>
+        <option value="0">测试网</option>
+    </select>
 </div>
 <div class="score-container">
+    <p class="tips">
+        写入区块中，请耐心等待些许时间...
+    </p>
     <h3>
         <span class="user">
 
@@ -190,7 +225,7 @@
 
     function toggleMute() {
         game.mute();
-        document.getElementById("muteLink").innerText = game.sounds.mute ? "unmute" : "mute";
+        document.getElementById("muteLink").innerText = game.sounds.mute ? "开启声音" : "静音";
     }
 
     var account = null;
@@ -204,6 +239,7 @@
         "data": {},
         "method": "getAccount",
     }, "*");
+    
 
     window.onload = function () {
 
@@ -219,12 +255,23 @@
         testNeb.setRequest(new HttpRequest("https://testnet.nebulas.io"));
 
         var testNet = true;
-        var testDappAddress = "n1tx8y8LYeQeqJGEyn4SspVAY48nCg5QCRg";
+        var testDappAddress = "n1qagWZKrwsqv4Hx9q9mL6n7xfUWmLZTrac";
         var txhash = null;
         var scoretxhash = null;
 
         var internal = null;
         var sinternal = null;
+
+        window.chooseNet = function() {
+            var net = document.getElementById("net").value;
+            if(net == '1'){
+                alert("主网");
+            }else {
+                testNet = true;
+                getName();
+                getRank();
+            }
+        }
 
         document.querySelector(".user").addEventListener('click', function () {
             this.style.display = 'none';
@@ -240,10 +287,14 @@
         })
 
         document.getElementById("nameBtn").addEventListener("click", function () {
+            if (!account) {
+                alert("未检查到您导入的钱包地址，请先安装星云钱包插件，导入钱包后再使用！");
+                return;
+            }
             var newName = document.getElementById("username").value;
             var to = testDappAddress;
             var value = "0";
-            var callFunction = "changeUsername"
+            var callFunction = "changeUsername";
             var callArgs = "[\"" + newName + "\"]";
             if (testNet) {
                 to = testDappAddress;
@@ -275,37 +326,57 @@
                         document.querySelector(".user").style.display = "inline-block";
                         document.querySelector(".highestScore").style.display = "inline-block";
                         txhash = null;
-                        window.location.reload();
                         window.clearInterval(internal);
+                        document.querySelector(".tips").style.display = "none";
+                        document.querySelector(".rank").innerText = "";
+                        getRank();
                     }
                 })
                 .catch(function (err) {
                     txhash = null;
+                    document.querySelector(".tips").style.display = "none";
                     window.clearInterval(internal);
                     alert("出错了：" + err);
                 });
         }
 
         function cbPush(resp) {
+            document.querySelector(".tips").style.display = "block";
             txhash = resp.txhash;
         }
 
         if (typeof(webExtensionWallet) === "undefined") {
-            alert("请先安装星云钱包浏览器插件");
+            alert("如果您想把您的得分永久的保存到区块链上，请先安装星云钱包浏览器插件！");
         } else {
-            getName();
-            getRank();
+            setTimeout(function () {
+                if (account) {
+                    getName();
+                    getRank();
 
-            game.over = function () {
-                var score = game.score;
-                var level = game.level;
-                if(score > lastHightScore){
-                    score(score, level);
+                    game.over = function () {
+                        var score = game.score;
+                        var level = game.level;
+                        if (score > lastHightScore) {
+                            saveScore(score, level);
+                        }
+                    }
+                } else {
+                    alert("检测到您未在星云钱包插件中导入钱包，会导致您的游戏分数未能保存到区块链上，参与排名！");
                 }
-            }
+
+            }, 1000)
+
         }
 
-        function score(score, level) {
+        function saveScore(score, level) {
+            if (!account) {
+                return;
+            }
+
+            var r = confirm("是否上传数据到区块链！");
+            if (!r) {
+                return;
+            }
 
             var to = testDappAddress;
             var value = "0";
@@ -324,31 +395,37 @@
             sinternal = window.setInterval(function () {
 
                 if (testNet) {
-                    getScoreTransactionReceipt(testNeb);
+                    getScoreTransactionReceipt(testNeb, score);
                 } else {
-                    getScoreTransactionReceipt(neb);
+                    getScoreTransactionReceipt(neb, score);
                 }
             }, 10000)
         }
 
-        function getScoreTransactionReceipt(neb) {
+        function getScoreTransactionReceipt(neb, score) {
 
-            neb.api.getTransactionReceipt(txhash)
+            neb.api.getTransactionReceipt(scoretxhash)
                 .then(function (resp) {
                     if (resp && resp.status == 1) {
-                        scoretxhash=null;
+                        scoretxhash = null;
                         window.clearInterval(sinternal);
                         alert("提交成功");
+                        document.querySelector(".highestScore").innerText = "最高得分：" + score;
+                        document.querySelector(".tips").style.display = "none";
+                        document.querySelector(".rank").innerText = "";
+                        getRank();
                     }
                 })
                 .catch(function (err) {
-                    scoretxhash=null;
+                    scoretxhash = null;
                     window.clearInterval(sinternal);
+                    document.querySelector(".tips").style.display = "none";
                     alert("出错了：" + err);
                 });
         }
 
         function scorePush(resp) {
+            document.querySelector(".tips").style.display = "block";
             scoretxhash = resp.txhash;
         }
 
@@ -390,11 +467,11 @@
                         this.showDialogs("异常", "智能合约返回数据异常！", false, true);
                     }
 
-                    if(result){
+                    if (result) {
                         document.querySelector(".user").innerText = result.name;
                         document.querySelector(".highestScore").innerText = "最高得分：" + result.score;
                         lastHightScore = result.score;
-                    }else {
+                    } else {
                         document.querySelector(".user").innerText = '匿名用户';
                         document.querySelector(".highestScore").innerText = "点击修改";
                     }
@@ -443,7 +520,15 @@
                         if (invaders && invaders.length > 0) {
                             var r = "";
                             for (var i = 0; i < invaders.length; i++) {
-                                r += '<li> <p> <span class=" username ">' + invaders[i].name + '</span> <span class=" score ">' + invaders[i].score + '分</span> <span class=" level ">等级 ' + invaders[i].level + '</span> </p> </li>'
+                                if(i==0){
+                                    r += '<li> <p class="first"> ' + (i + 1) +' <span class=" username ">' + invaders[i].name + '</span> <span class=" score ">' + invaders[i].score + '分</span> <span class=" level ">等级 ' + invaders[i].level + '</span> </p> </li>'
+                                }else if(i ==1){
+                                    r += '<li> <p class="second"> ' + (i + 1) +' <span class=" username ">' + invaders[i].name + '</span> <span class=" score ">' + invaders[i].score + '分</span> <span class=" level ">等级 ' + invaders[i].level + '</span> </p> </li>'
+                                }else if(i == 2){
+                                    r += '<li> <p class="third"> ' + (i + 1) +' <span class=" username ">' + invaders[i].name + '</span> <span class=" score ">' + invaders[i].score + '分</span> <span class=" level ">等级 ' + invaders[i].level + '</span> </p> </li>'
+                                }else {
+                                    r += '<li> <p> ' + (i + 1) +' <span class=" username ">' + invaders[i].name + '</span> <span class=" score ">' + invaders[i].score + '分</span> <span class=" level ">等级 ' + invaders[i].level + '</span> </p> </li>'
+                                }
                             }
 
                             document.querySelector(".rank").innerHTML = r;

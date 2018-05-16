@@ -67,19 +67,26 @@ SpaceInvadersContract.prototype = {
                 this.invaders.put(from, invader);
 
             }else {
-                var spaceInvader = new SpaceInvader();
-                spaceInvader.name = newName;
-                spaceInvader.address = from;
-                spaceInvader.score = 0;
-                spaceInvader.level = 0;
-                spaceInvader.date = "";
 
-                this.nameToAddress.set(newName, from);
-                this.addressToName.set(from, newName);
-                var index = this.size;
-                this.invadersMap.set(index, from);
-                this.invaders.put(from, spaceInvader);
-                this.size += 1;
+                var inva = this.invaders.get(from);
+                if(inva){
+                    inva.name = newName;
+                    this.invaders.put(from, inva);
+                }else {
+                    var spaceInvader = new SpaceInvader();
+                    spaceInvader.name = newName;
+                    spaceInvader.address = from;
+                    spaceInvader.score = 0;
+                    spaceInvader.level = 0;
+                    spaceInvader.date = "";
+
+                    this.nameToAddress.set(newName, from);
+                    this.addressToName.set(from, newName);
+                    var index = this.size;
+                    this.invadersMap.set(index, from);
+                    this.invaders.put(from, spaceInvader);
+                    this.size += 1;
+                }
             }
 
             result.code = 0;
