@@ -1,184 +1,191 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>太空侵略者</title>
-    <meta charset="UTF-8">
-    <link rel="stylesheet" type="text/css" href="css/core.css">
-    <link rel="stylesheet" type="text/css" href="css/typeography.css">
-    <style>
+  <title>太空侵略者</title>
+  <meta charset="UTF-8">
+  <link rel="stylesheet" type="text/css" href="css/core.css">
+  <link rel="stylesheet" type="text/css" href="css/typeography.css">
+  <style>
 
-        /* Styling needed for a fullscreen canvas and no scrollbars. */
-        body, html {
-            width: 100%;
-            height: 100%;
-            margin: 0;
-            padding: 0;
-            overflow: hidden;
-        }
+    /* Styling needed for a fullscreen canvas and no scrollbars. */
+    body, html {
+      width: 100%;
+      height: 100%;
+      margin: 0;
+      padding: 0;
+      overflow: hidden;
+    }
 
-        #starfield {
-            width: 100%;
-            height: 100%;
-            z-index: -1;
-            position: absolute;
-            left: 0px;
-            top: 0px;
-        }
+    #starfield {
+      width: 100%;
+      height: 100%;
+      z-index: -1;
+      position: absolute;
+      left: 0px;
+      top: 0px;
+    }
 
-        #gamecontainer {
-            width: 800px;
-            margin-left: auto;
-            margin-right: auto;
-        }
+    #gamecontainer {
+      width: 800px;
+      margin-left: auto;
+      margin-right: auto;
+    }
 
-        #gamecanvas {
-            width: 800px;
-            height: 600px;
-        }
+    #gamecanvas {
+      width: 800px;
+      height: 600px;
+    }
 
-        #info {
-            width: 800px;
-            margin-left: auto;
-            margin-right: auto;
-            text-align: center;
-        }
+    #info {
+      width: 800px;
+      margin-left: auto;
+      margin-right: auto;
+      text-align: center;
+    }
 
-        .score-container {
-            position: absolute;
-            top: 50px;
-            z-index: 2;
-            left: 50%;
-            transform: translateX(400px);
-            padding: 30px 30px;
-            color: #a0a0a0;
-            background: #333333;
-            opacity: 0.9;
-            border-radius: 5px;
-            height: 500px;
-            max-height: 500px;
-            overflow-y: scroll;
-            max-width: 300px;
-            width: 300px;
-        }
+    .score-container {
+      position: absolute;
+      top: 50px;
+      z-index: 2;
+      left: 50%;
+      transform: translateX(400px);
+      padding: 30px 30px;
+      color: #a0a0a0;
+      background: #333333;
+      opacity: 0.9;
+      border-radius: 5px;
+      height: 500px;
+      max-height: 500px;
+      overflow-y: scroll;
+      max-width: 300px;
+      width: 300px;
+    }
 
-        .rank li {
-            list-style: none;
-        }
+    .rank li {
+      list-style: none;
+    }
 
-        .rank li p {
-            padding: 5px 0;
-        }
+    .rank li p {
+      padding: 5px 0;
+    }
 
-        .score {
-            display: inline-block;
-            width: 60px;
-        }
+    .score {
+      display: inline-block;
+      width: 60px;
+    }
 
-        .username {
-            display: inline-block;
-            width: 120px;
-            overflow: hidden;
-            text-overflow: ellipsis;
-            white-space: nowrap;
-            vertical-align: bottom;
-        }
+    .username {
+      display: inline-block;
+      width: 120px;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+      vertical-align: bottom;
+    }
 
-        #username {
-            padding: 5px 0 5px 10px;
-        }
+    #username {
+      padding: 5px 0 5px 10px;
+    }
 
-        .level {
-            display: inline-block;
-            width: 60px;
-        }
+    .level {
+      display: inline-block;
+      width: 60px;
+    }
 
-        #nameChange {
-            display: none;
-        }
+    #nameChange {
+      display: none;
+    }
 
-        .user {
-            cursor: pointer;
-            color: #ffffff;
-        }
+    .user {
+      cursor: pointer;
+      color: #ffffff;
+    }
 
-        .highestScore {
-            font-size: 16px;
-            font-weight: normal;
-            color: #ffffff;
-            margin-left: 20px;
-        }
+    .highestScore {
+      font-size: 16px;
+      font-weight: normal;
+      color: #ffffff;
+      margin-left: 20px;
+    }
 
-        .first {
-            color: rgb(218, 178, 115);
-        }
+    .first {
+      color: rgb(218, 178, 115);
+    }
 
-        .second {
-            color: rgb(233, 233, 216);
-        }
+    .second {
+      color: rgb(233, 233, 216);
+    }
 
-        .third {
-            color: rgb(186, 110, 64);
-        }
+    .third {
+      color: rgb(186, 110, 64);
+    }
 
-        .tips{
-            position: absolute;
-            color: #7bd075;
-            top: 15px;
-            display: none;
-        }
+    .tips {
+      position: absolute;
+      color: #7bd075;
+      top: 15px;
+      display: none;
+    }
 
-        .nets{
-            position: absolute;
-            top: 20px;
-            right: 100px;
-        }
-        #net{
-            padding: 3px 10px;
-        }
-    </style>
+    .nets {
+      position: absolute;
+      top: 20px;
+      right: 100px;
+    }
+
+    #net {
+      padding: 3px 10px;
+    }
+  </style>
 </head>
 <body>
 <div id="starfield"></div>
 <div id="gamecontainer">
-    <canvas id="gameCanvas"></canvas>
+  <canvas id="gameCanvas"></canvas>
 </div>
 <div id="info">
-    <p>使用方向键移动,按空格键发射. 每升一级炸弹速度会越来越快</p>
-    <p><a id="muteLink" href="#" onclick="toggleMute()">静音</a>
-    <p>联系我：QQ：3326712209</p>
+  <p>使用方向键移动,按空格键发射. 每升一级炸弹速度会越来越快</p>
+  <p><a id="muteLink" href="#" onclick="toggleMute()">静音</a>
+  <p>联系我：QQ：3326712209</p>
 </div>
 
 <div class="nets">
-    <select name="net" id="net" onchange="chooseNet()">
-        <option value="1">主网</option>
-        <option value="0">测试网</option>
-    </select>
+  <select name="net" id="net" onchange="chooseNet()">
+    <option value="1">主网</option>
+    <option value="0">测试网</option>
+  </select>
 </div>
 <div class="score-container">
-    <p class="tips">
-        写入区块中，请耐心等待些许时间...
-    </p>
-    <h3>
+  <p class="tips">
+    写入区块中，请耐心等待些许时间...
+  </p>
+  <h3>
         <span class="user">
 
         </span>
-        <span class="highestScore">
+    <span class="highestScore">
         </span>
-        <p id="nameChange">
-            <input type="text" id="username" name="username"/>
-            <button id="nameBtn">确定</button>
-            <button id="cancelBtn">取消</button>
-        </p>
+    <p>
+      SIT 余额：
+      <span class="sitBalance">
+            0
+          </span>
+    </p>
+    <p id="nameChange">
+      <input type="text" id="username" name="username"/>
+      <button id="nameBtn">确定</button>
+      <button id="cancelBtn">取消</button>
+    </p>
 
-    </h3>
-    <p>最佳排名：</p>
-    <ul class="rank">
-        <li>
-            <p>
-                加载中...
-            </p>
-        </li>
-    </ul>
+  </h3>
+  <p>最佳排名：</p>
+  <ul class="rank">
+    <li>
+      <p>
+        加载中...
+      </p>
+    </li>
+  </ul>
 </div>
 
 <script src="js/starfield.js"></script>
@@ -187,393 +194,440 @@
 <script src="js/nebPay.js"></script>
 <script>
 
-    //  Create the starfield.
-    var container = document.getElementById('starfield');
-    var starfield = new Starfield();
-    starfield.initialise(container);
-    starfield.start();
+  //  Create the starfield.
+  var container = document.getElementById('starfield');
+  var starfield = new Starfield();
+  starfield.initialise(container);
+  starfield.start();
 
-    var lastHightScore = 0;
+  var lastHightScore = 0;
 
-    //  Setup the canvas.
-    var canvas = document.getElementById("gameCanvas");
-    canvas.width = 800;
-    canvas.height = 600;
+  //  Setup the canvas.
+  var canvas = document.getElementById("gameCanvas");
+  canvas.width = 800;
+  canvas.height = 600;
 
-    //  Create the game.
-    var game = new Game();
+  //  Create the game.
+  var game = new Game();
 
-    //  Initialise it with the game canvas.
-    game.initialise(canvas);
+  //  Initialise it with the game canvas.
+  game.initialise(canvas);
 
-    //  Start the game.
-    game.start();
+  //  Start the game.
+  game.start();
 
-    //  Listen for keyboard events.
-    window.addEventListener("keydown", function keydown(e) {
-        var keycode = e.which || window.event.keycode;
-        //  Supress further processing of left/right/space (37/29/32)
-        if (keycode == 37 || keycode == 39 || keycode == 32) {
-            e.preventDefault();
-        }
-        game.keyDown(keycode);
-    });
-    window.addEventListener("keyup", function keydown(e) {
-        var keycode = e.which || window.event.keycode;
-        game.keyUp(keycode);
-    });
+  //  Listen for keyboard events.
+  window.addEventListener("keydown", function keydown(e) {
+    var keycode = e.which || window.event.keycode;
+    //  Supress further processing of left/right/space (37/29/32)
+    if (keycode == 37 || keycode == 39 || keycode == 32) {
+      e.preventDefault();
+    }
+    game.keyDown(keycode);
+  });
+  window.addEventListener("keyup", function keydown(e) {
+    var keycode = e.which || window.event.keycode;
+    game.keyUp(keycode);
+  });
 
-    function toggleMute() {
-        game.mute();
-        document.getElementById("muteLink").innerText = game.sounds.mute ? "开启声音" : "静音";
+  function toggleMute() {
+    game.mute();
+    document.getElementById("muteLink").innerText = game.sounds.mute ? "开启声音" : "静音";
+  }
+
+  var account = null;
+  window.addEventListener('message', function (e) {
+    if (e.data.data && !!e.data.data.account) {
+      account = e.data.data.account;
+    }
+  });
+  window.postMessage({
+    "target": "contentscript",
+    "data": {},
+    "method": "getAccount",
+  }, "*");
+
+
+  window.onload = function () {
+
+    var NebPay = require("nebpay");     //https://github.com/nebulasio/nebPay
+    var nebPay = new NebPay();
+
+    var HttpRequest = require("nebulas").HttpRequest;
+    var Neb = require("nebulas").Neb;
+    var neb = new Neb();
+    var Utils = require("nebulas").Utils;
+    neb.setRequest(new HttpRequest("https://mainnet.nebulas.io"));
+
+    var testNeb = new Neb();
+    testNeb.setRequest(new HttpRequest("https://testnet.nebulas.io"));
+
+    var testNet = true;
+    var testDappAddress = "n1vSf2YJj3zAcAv6Tk7Q7QfFrKbMseMPyT6";
+    var txhash = null;
+    var scoretxhash = null;
+
+    var internal = null;
+    var sinternal = null;
+
+    window.chooseNet = function () {
+      var net = document.getElementById("net").value;
+      if (net == '1') {
+        alert("主网");
+      } else {
+        testNet = true;
+        getName();
+        getRank();
+      }
     }
 
-    var account = null;
-    window.addEventListener('message', function (e) {
-        if (e.data.data && !!e.data.data.account) {
-            account = e.data.data.account;
+    document.querySelector(".user").addEventListener('click', function () {
+      this.style.display = 'none';
+      document.getElementById("nameChange").style.display = "inline-block";
+      document.querySelector(".highestScore").style.display = "none";
+      var name = document.querySelector(".user").innerText;
+      document.getElementById("username").value = name;
+    })
+    document.getElementById("cancelBtn").addEventListener('click', function () {
+      document.getElementById("nameChange").style.display = "none";
+      document.querySelector(".user").style.display = "inline-block";
+      document.querySelector(".highestScore").style.display = "inline-block";
+    })
+
+    document.getElementById("nameBtn").addEventListener("click", function () {
+      if (!account) {
+        alert("未检查到您导入的钱包地址，请先安装星云钱包插件，导入钱包后再使用！");
+        return;
+      }
+      var newName = document.getElementById("username").value;
+      var to = testDappAddress;
+      var value = "0";
+      var callFunction = "changeUsername";
+      var callArgs = "[\"" + newName + "\"]";
+      if (testNet) {
+        to = testDappAddress;
+      } else {
+        to = testDappAddress;
+      }
+      nebPay.call(to, value, callFunction, callArgs, {
+        listener: cbPush
+      });
+
+      internal = window.setInterval(function () {
+
+        if (testNet) {
+          getTransactionReceipt(testNeb, newName);
+        } else {
+          getTransactionReceipt(neb, newName);
         }
+      }, 10000)
+
     });
-    window.postMessage({
-        "target": "contentscript",
-        "data": {},
-        "method": "getAccount",
-    }, "*");
-    
 
-    window.onload = function () {
+    function getTransactionReceipt(neb, newName) {
 
-        var NebPay = require("nebpay");     //https://github.com/nebulasio/nebPay
-        var nebPay = new NebPay();
-
-        var HttpRequest = require("nebulas").HttpRequest;
-        var Neb = require("nebulas").Neb;
-        var neb = new Neb();
-        neb.setRequest(new HttpRequest("https://mainnet.nebulas.io"));
-
-        var testNeb = new Neb();
-        testNeb.setRequest(new HttpRequest("https://testnet.nebulas.io"));
-
-        var testNet = true;
-        var testDappAddress = "n1qagWZKrwsqv4Hx9q9mL6n7xfUWmLZTrac";
-        var txhash = null;
-        var scoretxhash = null;
-
-        var internal = null;
-        var sinternal = null;
-
-        window.chooseNet = function() {
-            var net = document.getElementById("net").value;
-            if(net == '1'){
-                alert("主网");
-            }else {
-                testNet = true;
-                getName();
-                getRank();
-            }
-        }
-
-        document.querySelector(".user").addEventListener('click', function () {
-            this.style.display = 'none';
-            document.getElementById("nameChange").style.display = "inline-block";
-            document.querySelector(".highestScore").style.display = "none";
-            var name = document.querySelector(".user").innerText;
-            document.getElementById("username").value = name;
-        })
-        document.getElementById("cancelBtn").addEventListener('click', function () {
+      neb.api.getTransactionReceipt(txhash)
+        .then(function (resp) {
+          if (resp && resp.status == 1) {
+            document.querySelector(".user").innerText = newName;
             document.getElementById("nameChange").style.display = "none";
             document.querySelector(".user").style.display = "inline-block";
             document.querySelector(".highestScore").style.display = "inline-block";
+            txhash = null;
+            window.clearInterval(internal);
+            document.querySelector(".tips").style.display = "none";
+            document.querySelector(".rank").innerText = "";
+            getRank();
+          }
         })
-
-        document.getElementById("nameBtn").addEventListener("click", function () {
-            if (!account) {
-                alert("未检查到您导入的钱包地址，请先安装星云钱包插件，导入钱包后再使用！");
-                return;
-            }
-            var newName = document.getElementById("username").value;
-            var to = testDappAddress;
-            var value = "0";
-            var callFunction = "changeUsername";
-            var callArgs = "[\"" + newName + "\"]";
-            if (testNet) {
-                to = testDappAddress;
-            } else {
-                to = testDappAddress;
-            }
-            nebPay.call(to, value, callFunction, callArgs, {
-                listener: cbPush
-            });
-
-            internal = window.setInterval(function () {
-
-                if (testNet) {
-                    getTransactionReceipt(testNeb, newName);
-                } else {
-                    getTransactionReceipt(neb, newName);
-                }
-            }, 10000)
-
+        .catch(function (err) {
+          txhash = null;
+          document.querySelector(".tips").style.display = "none";
+          window.clearInterval(internal);
+          alert("出错了：" + err);
         });
+    }
 
-        function getTransactionReceipt(neb, newName) {
+    function cbPush(resp) {
+      document.querySelector(".tips").style.display = "block";
+      txhash = resp.txhash;
+    }
 
-            neb.api.getTransactionReceipt(txhash)
-                .then(function (resp) {
-                    if (resp && resp.status == 1) {
-                        document.querySelector(".user").innerText = newName;
-                        document.getElementById("nameChange").style.display = "none";
-                        document.querySelector(".user").style.display = "inline-block";
-                        document.querySelector(".highestScore").style.display = "inline-block";
-                        txhash = null;
-                        window.clearInterval(internal);
-                        document.querySelector(".tips").style.display = "none";
-                        document.querySelector(".rank").innerText = "";
-                        getRank();
-                    }
-                })
-                .catch(function (err) {
-                    txhash = null;
-                    document.querySelector(".tips").style.display = "none";
-                    window.clearInterval(internal);
-                    alert("出错了：" + err);
-                });
-        }
+    if (typeof(webExtensionWallet) === "undefined") {
+      alert("如果您想把您的得分永久的保存到区块链上，请先安装星云钱包浏览器插件！");
+    } else {
+      setTimeout(function () {
+        if (account) {
+          getName();
+          getRank();
+          getBalance()
 
-        function cbPush(resp) {
-            document.querySelector(".tips").style.display = "block";
-            txhash = resp.txhash;
-        }
-
-        if (typeof(webExtensionWallet) === "undefined") {
-            alert("如果您想把您的得分永久的保存到区块链上，请先安装星云钱包浏览器插件！");
+          game.over = function () {
+            var score = game.score;
+            var level = game.level;
+            if (score > lastHightScore) {
+              saveScore(score, level);
+            }
+          }
         } else {
-            setTimeout(function () {
-                if (account) {
-                    getName();
-                    getRank();
-
-                    game.over = function () {
-                        var score = game.score;
-                        var level = game.level;
-                        if (score > lastHightScore) {
-                            saveScore(score, level);
-                        }
-                    }
-                } else {
-                    alert("检测到您未在星云钱包插件中导入钱包，会导致您的游戏分数未能保存到区块链上，参与排名！");
-                }
-
-            }, 1000)
-
+          alert("检测到您未在星云钱包插件中导入钱包，会导致您的游戏分数未能保存到区块链上，参与排名！");
         }
 
-        function saveScore(score, level) {
-            if (!account) {
-                return;
-            }
-
-            var r = confirm("是否上传数据到区块链！");
-            if (!r) {
-                return;
-            }
-
-            var to = testDappAddress;
-            var value = "0";
-            var callFunction = "score"
-            var date = getDate();
-            var callArgs = "[\"" + score + "\",\"" + level + "\",\"" + date + "\"]";
-            if (testNet) {
-                to = testDappAddress;
-            } else {
-                to = testDappAddress;
-            }
-            nebPay.call(to, value, callFunction, callArgs, {
-                listener: scorePush
-            });
-
-            sinternal = window.setInterval(function () {
-
-                if (testNet) {
-                    getScoreTransactionReceipt(testNeb, score);
-                } else {
-                    getScoreTransactionReceipt(neb, score);
-                }
-            }, 10000)
-        }
-
-        function getScoreTransactionReceipt(neb, score) {
-
-            neb.api.getTransactionReceipt(scoretxhash)
-                .then(function (resp) {
-                    if (resp && resp.status == 1) {
-                        scoretxhash = null;
-                        window.clearInterval(sinternal);
-                        alert("提交成功");
-                        document.querySelector(".highestScore").innerText = "最高得分：" + score;
-                        document.querySelector(".tips").style.display = "none";
-                        document.querySelector(".rank").innerText = "";
-                        getRank();
-                    }
-                })
-                .catch(function (err) {
-                    scoretxhash = null;
-                    window.clearInterval(sinternal);
-                    document.querySelector(".tips").style.display = "none";
-                    alert("出错了：" + err);
-                });
-        }
-
-        function scorePush(resp) {
-            document.querySelector(".tips").style.display = "block";
-            scoretxhash = resp.txhash;
-        }
-
-        function getDate() {
-            var date = new Date();
-            var seperator1 = "-";
-            var year = date.getFullYear();
-            var month = date.getMonth() + 1;
-            var strDate = date.getDate();
-            if (month >= 1 && month <= 9) {
-                month = "0" + month;
-            }
-            if (strDate >= 0 && strDate <= 9) {
-                strDate = "0" + strDate;
-            }
-            var currentdate = year + seperator1 + month + seperator1 + strDate;
-            return currentdate;
-        }
-
-        function getName() {
-            var from = account;
-            var value = "0";
-            var nonce = "0";
-            var gas_price = "1000000";
-            var gas_limit = "2000000";
-            var callFunction = "get";
-            var callArgs = ""; //in the form of ["args"]
-            var contract = {
-                "function": callFunction,
-                "args": callArgs
-            };
-
-            function cbSearch(resp) {
-                var result = resp.result;
-                if (result) {
-                    try {
-                        result = JSON.parse(result)
-                    } catch (err) {
-                        this.showDialogs("异常", "智能合约返回数据异常！", false, true);
-                    }
-
-                    if (result) {
-                        document.querySelector(".user").innerText = result.name;
-                        document.querySelector(".highestScore").innerText = "最高得分：" + result.score;
-                        lastHightScore = result.score;
-                    } else {
-                        document.querySelector(".user").innerText = '匿名用户';
-                        document.querySelector(".highestScore").innerText = "点击修改";
-                    }
-                } else {
-                    alert("查询账户地址用户名异常！");
-                }
-            }
-
-            if (testNet) {
-                testNeb.api.call(from, testDappAddress, value, nonce, gas_price, gas_limit, contract).then(function (resp) {
-                    cbSearch(resp)
-                }).catch(function (err) {
-                    alert("出错了：" + err);
-                })
-            } else {
-                neb.api.call(from, testDappAddress, value, nonce, gas_price, gas_limit, contract).then(function (resp) {
-                    cbSearch(resp)
-                }).catch(function (err) {
-                    alert("出错了：" + err);
-                })
-            }
-        }
-
-        function getRank() {
-            var from = account;
-            var value = "0";
-            var nonce = "0";
-            var gas_price = "1000000";
-            var gas_limit = "2000000";
-            var callFunction = "query";
-            var callArgs = "[200,0]"; //in the form of ["args"]
-            var contract = {
-                "function": callFunction,
-                "args": callArgs
-            };
-
-            function querySearch(resp) {
-                var result = resp.result;
-                if (result) {
-                    try {
-                        result = JSON.parse(result)
-                        var invaders = result.invaders;
-                        invaders.sort(compare);
-                        invaders.slice(0, 2);
-                        console.log(invaders)
-                        if (invaders && invaders.length > 0) {
-                            var r = "";
-                            for (var i = 0; i < invaders.length; i++) {
-                                if(i==0){
-                                    r += '<li> <p class="first"> ' + (i + 1) +' <span class=" username ">' + invaders[i].name + '</span> <span class=" score ">' + invaders[i].score + '分</span> <span class=" level ">等级 ' + invaders[i].level + '</span> </p> </li>'
-                                }else if(i ==1){
-                                    r += '<li> <p class="second"> ' + (i + 1) +' <span class=" username ">' + invaders[i].name + '</span> <span class=" score ">' + invaders[i].score + '分</span> <span class=" level ">等级 ' + invaders[i].level + '</span> </p> </li>'
-                                }else if(i == 2){
-                                    r += '<li> <p class="third"> ' + (i + 1) +' <span class=" username ">' + invaders[i].name + '</span> <span class=" score ">' + invaders[i].score + '分</span> <span class=" level ">等级 ' + invaders[i].level + '</span> </p> </li>'
-                                }else {
-                                    r += '<li> <p> ' + (i + 1) +' <span class=" username ">' + invaders[i].name + '</span> <span class=" score ">' + invaders[i].score + '分</span> <span class=" level ">等级 ' + invaders[i].level + '</span> </p> </li>'
-                                }
-                            }
-
-                            document.querySelector(".rank").innerHTML = r;
-                        } else {
-                            document.querySelector(".rank").innerHTML = "<li>还未有用户排名数据</li>";
-                        }
-                    } catch (err) {
-                        alert("异常！" + err);
-                    }
-                    console.log("query result" + result);
-                } else {
-
-                }
-            }
-
-            if (testNet) {
-                testNeb.api.call(from, testDappAddress, value, nonce, gas_price, gas_limit, contract).then(function (resp) {
-                    querySearch(resp)
-                }).catch(function (err) {
-                    alert("出错了：" + err);
-                })
-            } else {
-                neb.api.call(from, testDappAddress, value, nonce, gas_price, gas_limit, contract).then(function (resp) {
-                    querySearch(resp)
-                }).catch(function (err) {
-                    alert("出错了：" + err);
-                })
-            }
-        }
-
-        function compare(a, b) {
-            // Use toUpperCase() to ignore character casing
-            var scoreA = a.score;
-            var scoreB = b.score;
-
-            var comparison = 0;
-            if (scoreA > scoreB) {
-                comparison = -1;
-            } else if (scoreA < scoreB) {
-                comparison = 1;
-            }
-            return comparison;
-        }
+      }, 1000)
 
     }
+
+    function saveScore(score, level) {
+      if (!account) {
+        return;
+      }
+
+      var r = confirm("是否上传数据到区块链！");
+      if (!r) {
+        return;
+      }
+
+      var to = testDappAddress;
+      var value = "0";
+      var callFunction = "score"
+      var date = getDate();
+      var callArgs = "[\"" + score + "\",\"" + level + "\",\"" + date + "\"]";
+      if (testNet) {
+        to = testDappAddress;
+      } else {
+        to = testDappAddress;
+      }
+      nebPay.call(to, value, callFunction, callArgs, {
+        listener: scorePush
+      });
+
+      sinternal = window.setInterval(function () {
+
+        if (testNet) {
+          getScoreTransactionReceipt(testNeb, score);
+        } else {
+          getScoreTransactionReceipt(neb, score);
+        }
+      }, 10000)
+    }
+
+    function getScoreTransactionReceipt(neb, score) {
+
+      neb.api.getTransactionReceipt(scoretxhash)
+        .then(function (resp) {
+          if (resp && resp.status == 1) {
+            scoretxhash = null;
+            window.clearInterval(sinternal);
+            alert("提交成功");
+            document.querySelector(".highestScore").innerText = "最高得分：" + score;
+            document.querySelector(".tips").style.display = "none";
+            document.querySelector(".rank").innerText = "";
+            getRank();
+            getBalance()
+          }
+        })
+        .catch(function (err) {
+          scoretxhash = null;
+          window.clearInterval(sinternal);
+          document.querySelector(".tips").style.display = "none";
+          alert("出错了：" + err);
+        });
+    }
+
+    function scorePush(resp) {
+      document.querySelector(".tips").style.display = "block";
+      scoretxhash = resp.txhash;
+    }
+
+    function getDate() {
+      var date = new Date();
+      var seperator1 = "-";
+      var year = date.getFullYear();
+      var month = date.getMonth() + 1;
+      var strDate = date.getDate();
+      if (month >= 1 && month <= 9) {
+        month = "0" + month;
+      }
+      if (strDate >= 0 && strDate <= 9) {
+        strDate = "0" + strDate;
+      }
+      var currentdate = year + seperator1 + month + seperator1 + strDate;
+      return currentdate;
+    }
+
+    function getName() {
+      var from = account;
+      var value = "0";
+      var nonce = "0";
+      var gas_price = "1000000";
+      var gas_limit = "2000000";
+      var callFunction = "get";
+      var callArgs = ""; //in the form of ["args"]
+      var contract = {
+        "function": callFunction,
+        "args": callArgs
+      };
+
+      function cbSearch(resp) {
+        var result = resp.result;
+        if (result) {
+          try {
+            result = JSON.parse(result)
+          } catch (err) {
+            alert("智能合约返回数据异常！");
+          }
+
+          if (result) {
+            document.querySelector(".user").innerText = result.name;
+            document.querySelector(".highestScore").innerText = "最高得分：" + result.score;
+            lastHightScore = result.score;
+          } else {
+            document.querySelector(".user").innerText = '匿名用户';
+            document.querySelector(".highestScore").innerText = "点击修改";
+          }
+        } else {
+          alert("查询账户地址用户名异常！");
+        }
+      }
+
+      if (testNet) {
+        testNeb.api.call(from, testDappAddress, value, nonce, gas_price, gas_limit, contract).then(function (resp) {
+          cbSearch(resp)
+        }).catch(function (err) {
+          alert("出错了：" + err);
+        })
+      } else {
+        neb.api.call(from, testDappAddress, value, nonce, gas_price, gas_limit, contract).then(function (resp) {
+          cbSearch(resp)
+        }).catch(function (err) {
+          alert("出错了：" + err);
+        })
+      }
+    }
+
+    function getBalance() {
+      var from = account;
+      var value = "0";
+      var nonce = "0";
+      var gas_price = "1000000";
+      var gas_limit = "2000000";
+      var callFunction = "balanceOf";
+      var callArgs = "[\"" + from + "\"]";
+      var contract = {
+        "function": callFunction,
+        "args": callArgs
+      };
+
+      function balanceSearch(resp) {
+        var result = resp.result;
+        if (result) {
+          try {
+            result = JSON.parse(result)
+          } catch (err) {
+            alert("智能合约返回数据异常！");
+          }
+          var balance = Utils.toBigNumber(result).div(Utils.toBigNumber(10).pow(8));
+          document.querySelector(".sitBalance").innerText = balance.toString(10);
+
+        } else {
+          alert("查询账户地址用户名异常！");
+        }
+      }
+
+      if (testNet) {
+        testNeb.api.call(from, testDappAddress, value, nonce, gas_price, gas_limit, contract).then(function (resp) {
+          balanceSearch(resp)
+        }).catch(function (err) {
+          alert("出错了：" + err);
+        })
+      } else {
+        neb.api.call(from, testDappAddress, value, nonce, gas_price, gas_limit, contract).then(function (resp) {
+          balanceSearch(resp)
+        }).catch(function (err) {
+          alert("出错了：" + err);
+        })
+      }
+    }
+
+    function getRank() {
+      var from = account;
+      var value = "0";
+      var nonce = "0";
+      var gas_price = "1000000";
+      var gas_limit = "2000000";
+      var callFunction = "query";
+      var callArgs = "[200,0]"; //in the form of ["args"]
+      var contract = {
+        "function": callFunction,
+        "args": callArgs
+      };
+
+      function querySearch(resp) {
+        var result = resp.result;
+        if (result) {
+          try {
+            result = JSON.parse(result)
+            var invaders = result.invaders;
+            invaders.sort(compare);
+            invaders.slice(0, 2);
+            console.log(invaders)
+            if (invaders && invaders.length > 0) {
+              var r = "";
+              for (var i = 0; i < invaders.length; i++) {
+                if (i == 0) {
+                  r += '<li> <p class="first"> ' + (i + 1) + ' <span class=" username ">' + invaders[i].name + '</span> <span class=" score ">' + invaders[i].score + '分</span> <span class=" level ">等级 ' + invaders[i].level + '</span> </p> </li>'
+                } else if (i == 1) {
+                  r += '<li> <p class="second"> ' + (i + 1) + ' <span class=" username ">' + invaders[i].name + '</span> <span class=" score ">' + invaders[i].score + '分</span> <span class=" level ">等级 ' + invaders[i].level + '</span> </p> </li>'
+                } else if (i == 2) {
+                  r += '<li> <p class="third"> ' + (i + 1) + ' <span class=" username ">' + invaders[i].name + '</span> <span class=" score ">' + invaders[i].score + '分</span> <span class=" level ">等级 ' + invaders[i].level + '</span> </p> </li>'
+                } else {
+                  r += '<li> <p> ' + (i + 1) + ' <span class=" username ">' + invaders[i].name + '</span> <span class=" score ">' + invaders[i].score + '分</span> <span class=" level ">等级 ' + invaders[i].level + '</span> </p> </li>'
+                }
+              }
+
+              document.querySelector(".rank").innerHTML = r;
+            } else {
+              document.querySelector(".rank").innerHTML = "<li>还未有用户排名数据</li>";
+            }
+          } catch (err) {
+            alert("异常！" + err);
+          }
+          console.log("query result" + result);
+        } else {
+
+        }
+      }
+
+      if (testNet) {
+        testNeb.api.call(from, testDappAddress, value, nonce, gas_price, gas_limit, contract).then(function (resp) {
+          querySearch(resp)
+        }).catch(function (err) {
+          alert("出错了：" + err);
+        })
+      } else {
+        neb.api.call(from, testDappAddress, value, nonce, gas_price, gas_limit, contract).then(function (resp) {
+          querySearch(resp)
+        }).catch(function (err) {
+          alert("出错了：" + err);
+        })
+      }
+    }
+
+    function compare(a, b) {
+      // Use toUpperCase() to ignore character casing
+      var scoreA = a.score;
+      var scoreB = b.score;
+
+      var comparison = 0;
+      if (scoreA > scoreB) {
+        comparison = -1;
+      } else if (scoreA < scoreB) {
+        comparison = 1;
+      }
+      return comparison;
+    }
+
+  }
 </script>
 </body>
 </html>
