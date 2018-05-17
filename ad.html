@@ -1,406 +1,499 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>购买广告-太空侵略者</title>
-    <meta charset="UTF-8">
-    <link rel="stylesheet" type="text/css" href="css/core.css">
-    <link rel="stylesheet" type="text/css" href="css/typeography.css">
-    <link rel="stylesheet" type="text/css" href="css/DatePickerX.min.css">
-    <style>
+  <title>购买广告-太空侵略者</title>
+  <meta charset="UTF-8">
+  <link rel="stylesheet" type="text/css" href="css/core.css">
+  <link rel="stylesheet" type="text/css" href="css/typeography.css">
+  <link rel="stylesheet" type="text/css" href="css/DatePickerX.min.css">
+  <style>
 
-        /* Styling needed for a fullscreen canvas and no scrollbars. */
-        body, html {
-            width: 100%;
-            height: 100%;
-            margin: 0;
-            padding: 0;
-            overflow: hidden;
-        }
+    /* Styling needed for a fullscreen canvas and no scrollbars. */
+    body, html {
+      width: 100%;
+      height: 100%;
+      margin: 0;
+      padding: 0;
+      overflow: hidden;
+    }
 
-        #starfield {
-            width: 100%;
-            height: 100%;
-            z-index: -1;
-            position: absolute;
-            left: 0px;
-            top: 0px;
-        }
+    #starfield {
+      width: 100%;
+      height: 100%;
+      z-index: -1;
+      position: absolute;
+      left: 0px;
+      top: 0px;
+    }
 
-        #info {
-            width: 800px;
-            margin-left: auto;
-            margin-right: auto;
-            text-align: center;
-            margin-top: 350px;
-        }
+    #info {
+      width: 800px;
+      margin-left: auto;
+      margin-right: auto;
+      text-align: center;
+      margin-top: 150px;
+    }
 
-        .container {
-            width: 500px;
-            margin-left: auto;
-            margin-right: auto;
-            margin-top: 150px;
-            color: #ffffff;
-            opacity: 0.9;
-        }
+    .container {
+      width: 500px;
+      margin-left: auto;
+      margin-right: auto;
+      margin-top: 150px;
+      color: #ffffff;
+      opacity: 0.9;
+    }
 
-        .container h2 {
-            text-align: center;
-        }
+    .container h2 {
+      text-align: center;
+    }
 
-        .container p {
-            margin-top: 10px;
-        }
-        input, textarea{
-            padding: 5px 10px;
-        }
+    .container p {
+      margin-top: 10px;
+    }
 
-        .score-container {
-            position: absolute;
-            top: 50px;
-            z-index: 2;
-            left: 50%;
-            transform: translateX(400px);
-            padding: 30px 30px;
-            color: #a0a0a0;
-            background: #333333;
-            opacity: 0.9;
-            border-radius: 5px;
-            height: 500px;
-            max-height: 500px;
-            overflow-y: scroll;
-            max-width: 300px;
-            width: 300px;
-        }
+    input, textarea {
+      padding: 5px 10px;
+    }
 
-        .rank li {
-            list-style: none;
-        }
+    .score-container {
+      position: absolute;
+      top: 80px;
+      z-index: 2;
+      left: 50%;
+      transform: translateX(400px);
+      padding: 10px 30px;
+      color: #a0a0a0;
+      background: #333333;
+      opacity: 0.9;
+      border-radius: 5px;
+      height: 120px;
+      max-height: 500px;
+      overflow: hidden;
+      max-width: 300px;
+      width: 300px;
+    }
 
-        .rank li p {
-            padding: 5px 0;
-        }
+    .rank li {
+      list-style: none;
+    }
 
+    .rank li p {
+      padding: 5px 0;
+    }
 
-        .user {
-            color: #ffffff;
-        }
+    .user {
+      color: #ffffff;
+    }
 
-        .tips {
-            position: absolute;
-            color: #7bd075;
-            top: 15px;
-            display: none;
-        }
-        .nets {
-            position: absolute;
-            top: 20px;
-            right: 100px;
-        }
+    .tips {
+      position: absolute;
+      color: #7bd075;
+      top: 15px;
+      display: none;
+    }
 
-        #net {
-            padding: 3px 10px;
-        }
+    .nets {
+      position: absolute;
+      top: 45px;
+      right: 100px;
+    }
 
-        #adBtn{
-            float: right;
-            margin-right: 45px;
-            cursor: pointer;
-        }
-    </style>
+    #net {
+      padding: 3px 10px;
+    }
+
+    #adBtn {
+      float: right;
+      margin-right: 45px;
+      cursor: pointer;
+    }
+    .ad{
+      position: fixed;
+      top: 0;
+      text-align: center;
+      padding: 10px ;
+      width: 100%;
+      color: rgb(218, 178, 115);
+      font-size: 16px;
+      font-weight: 500;
+
+    }
+    .words{
+      animation: move 25s infinite linear;
+      position: absolute;
+      display: inline-block;
+      white-space: nowrap;
+    }
+
+    @keyframes move {
+      0% {
+        right: 0;
+      }
+      100%{
+        right: 100%;
+      }
+    }
+  </style>
 </head>
 <body>
 <div id="starfield"></div>
+<div class="ad">
+  <span class="words">
 
+  </span>
+
+</div>
 <div class="container">
-    <h2>购买广告</h2>
-    <p>
-        <label for="date">广告日期：</label>
-    </p>
-    <p>
+  <h2>购买广告</h2>
+  <p>
+    <label for="date">广告日期：</label>
+  </p>
+  <p>
 
-        <input type="text" id="date" name="date">
-    </p>
-    <p>
+    <input type="text" id="date" name="date">
+  </p>
+  <p>
 
-        <label for="content">广告内容：</label>
-    </p>
-    <p>
+    <label for="content">广告内容：</label>
+  </p>
+  <p>
 
-        <textarea name="content" id="content" cols="60" rows="10"></textarea>
-    </p>
-    <p>
-        <button type="button" id="adBtn">确认</button>
-    </p>
+    <textarea name="content" id="content" cols="60" rows="10"></textarea>
+  </p>
+  <p>
+    <button type="button" id="adBtn">确认</button>
+  </p>
 </div>
 <div class="nets">
-    <select name="net" id="net" onchange="chooseNet()">
-        <option value="1">主网</option>
-        <option value="0">测试网</option>
-    </select>
+  <select name="net" id="net" onchange="chooseNet()">
+    <option value="1">主网</option>
+    <option value="0">测试网</option>
+  </select>
 </div>
 <div class="score-container">
-    <p class="tips">
-        写入区块中，请耐心等待些许时间...
-    </p>
-    <h3>
+  <p class="tips">
+    写入区块中，请耐心等待些许时间...
+  </p>
+  <h3>
         <span class="user">
         </span>
-        <p>
-            SIT 余额：
-            <span class="sitBalance">
+    <p>
+      SIT 余额：
+      <span class="sitBalance">
             0
           </span>
-        </p>
-    </h3>
+    </p>
+  </h3>
 
 </div>
 <div id="info">
-    <p>联系我：QQ：3326712209 | <a href="/spaceinvaders/index.html"> 首页</a> | <a href="/spaceinvaders/about.html">关于</a></p>
+  <p>联系我：QQ：3326712209 | <a href="/spaceinvaders/index.html"> 首页</a> | <a href="/spaceinvaders/about.html">关于</a></p>
 </div>
 <script src="js/starfield.js"></script>
 <script src="js/DatePickerX.min.js"></script>
 <script src="js/nebulas.js"></script>
 <script src="js/nebPay.js"></script>
 <script>
-    var container = document.getElementById('starfield');
-    var starfield = new Starfield();
-    starfield.initialise(container);
-    starfield.start();
+  var container = document.getElementById('starfield');
+  var starfield = new Starfield();
+  starfield.initialise(container);
+  starfield.start();
 
-    window.addEventListener('DOMContentLoaded', function()
-    {
-        var $min = document.querySelector('#date');
+  window.addEventListener('DOMContentLoaded', function () {
+    var $min = document.querySelector('#date');
 
-        $min.DatePickerX.init({
-            mondayFirst: true,
-            minDate    : new Date(2017, 8, 13)
-        });
-
-
+    $min.DatePickerX.init({
+      mondayFirst: true,
+      minDate: new Date(2017, 8, 13)
     });
 
-    var account = null;
-    var internal = null;
-    var txhash = null;
-    window.addEventListener('message', function (e) {
-        if (e.data.data && !!e.data.data.account) {
-            account = e.data.data.account;
-        }
-    });
-    window.postMessage({
-        "target": "contentscript",
-        "data": {},
-        "method": "getAccount",
-    }, "*");
 
-    window.onload = function () {
+  });
 
-        var NebPay = require("nebpay");     //https://github.com/nebulasio/nebPay
-        var nebPay = new NebPay();
+  var account = null;
+  var internal = null;
+  var txhash = null;
+  window.addEventListener('message', function (e) {
+    if (e.data.data && !!e.data.data.account) {
+      account = e.data.data.account;
+    }
+  });
+  window.postMessage({
+    "target": "contentscript",
+    "data": {},
+    "method": "getAccount",
+  }, "*");
 
-        var HttpRequest = require("nebulas").HttpRequest;
-        var Neb = require("nebulas").Neb;
-        var neb = new Neb();
-        var Utils = require("nebulas").Utils;
-        neb.setRequest(new HttpRequest("https://mainnet.nebulas.io"));
+  window.onload = function () {
 
-        var testNeb = new Neb();
-        testNeb.setRequest(new HttpRequest("https://testnet.nebulas.io"));
+    var NebPay = require("nebpay");     //https://github.com/nebulasio/nebPay
+    var nebPay = new NebPay();
 
-        var testNet = true;
-        var testDappAddress = "n1iwdcvEMukuGY558qw1LZXbRJCs4ecjwhZ";
+    var HttpRequest = require("nebulas").HttpRequest;
+    var Neb = require("nebulas").Neb;
+    var neb = new Neb();
+    var Utils = require("nebulas").Utils;
+    neb.setRequest(new HttpRequest("https://mainnet.nebulas.io"));
 
-        window.chooseNet = function () {
-            var net = document.getElementById("net").value;
-            if (net == '1') {
-                alert("主网");
-            } else {
-                testNet = true;
-                getName();
-            }
-        }
+    var testNeb = new Neb();
+    testNeb.setRequest(new HttpRequest("https://testnet.nebulas.io"));
+
+    var testNet = true;
+    var testDappAddress = "n1vN5bYZ2hgHBMVfFoD5XE8refzkSNT9Myp";
+
+    window.chooseNet = function () {
+      var net = document.getElementById("net").value;
+      if (net == '1') {
+        alert("主网");
+      } else {
+        testNet = true;
+      }
+      getName();
+      getAd;
+    }
 
 
-        if (typeof(webExtensionWallet) === "undefined") {
-            alert("如果您想把您的得分永久的保存到区块链上，请先安装星云钱包浏览器插件！");
+    if (typeof(webExtensionWallet) === "undefined") {
+      alert("如果您想把您的得分永久的保存到区块链上，请先安装星云钱包浏览器插件！");
+    } else {
+      setTimeout(function () {
+        if (account) {
+          getName();
+          getBalance();
+          getAd();
         } else {
-            setTimeout(function () {
-                if (account) {
-                    getName();
-                    getBalance();
-                } else {
-                    alert("检测到您未在星云钱包插件中导入钱包，会导致您的游戏分数未能保存到区块链上，参与排名！");
-                }
-
-            }, 1000)
-
+          alert("检测到您未在星云钱包插件中导入钱包，会导致您的游戏分数未能保存到区块链上，参与排名！");
         }
 
-        document.querySelector("#adBtn").addEventListener("click", function () {
-            document.querySelector(".tips").style.display = "block";
-            var date = document.getElementById("date").value;
-            var content = document.getElementById("content").value;
-            if(!date){
-                alert("请先选择广告投放日期！");
-                return;
-            }
-            if(!content){
-                alert("请输入广告内容！");
-                return;
-            }
-            var to = testDappAddress;
-            var value = "0";
-            var callFunction = "saveAd";
-            var callArgs = "[\"" + content + "\",\"" + date + "\"]";
-            if (testNet) {
-                to = testDappAddress;
-            } else {
-                to = testDappAddress;
-            }
-            nebPay.call(to, value, callFunction, callArgs, {
-                listener: cbPush
-            });
-
-            internal = window.setInterval(function () {
-
-                if (testNet) {
-                    getTransactionReceipt(testNeb);
-                } else {
-                    getTransactionReceipt(neb);
-                }
-            }, 10000)
-        })
-
-        function cbPush(resp) {
-            txhash = resp.txhash;
-        }
-
-        function getTransactionReceipt(neb, newName) {
-
-            neb.api.getTransactionReceipt(txhash)
-                .then(function (resp) {
-                    if (resp && resp.status == 1) {
-                        txhash = null;
-                        window.clearInterval(internal);
-                        document.querySelector(".tips").style.display = "none";
-                        alert("购买广告成功");
-                    }
-                })
-                .catch(function (err) {
-                    txhash = null;
-                    document.querySelector(".tips").style.display = "none";
-                    window.clearInterval(internal);
-                    alert("出错了：" + err);
-                });
-        }
-
-
-        function getName() {
-            var from = account;
-            var value = "0";
-            var nonce = "0";
-            var gas_price = "1000000";
-            var gas_limit = "2000000";
-            var callFunction = "get";
-            var callArgs = ""; //in the form of ["args"]
-            var contract = {
-                "function": callFunction,
-                "args": callArgs
-            };
-
-            function cbSearch(resp) {
-                var result = resp.result;
-                if (result) {
-                    try {
-                        result = JSON.parse(result)
-                    } catch (err) {
-                        alert("智能合约返回数据异常！");
-                    }
-
-                    if (result) {
-                        document.querySelector(".user").innerText = result.name;
-                    } else {
-                        document.querySelector(".user").innerText = '匿名用户';
-                    }
-                } else {
-                    alert("查询账户地址用户名异常！");
-                }
-            }
-
-            if (testNet) {
-                testNeb.api.call(from, testDappAddress, value, nonce, gas_price, gas_limit, contract).then(function (resp) {
-                    cbSearch(resp)
-                }).catch(function (err) {
-                    alert("出错了：" + err);
-                })
-            } else {
-                neb.api.call(from, testDappAddress, value, nonce, gas_price, gas_limit, contract).then(function (resp) {
-                    cbSearch(resp)
-                }).catch(function (err) {
-                    alert("出错了：" + err);
-                })
-            }
-        }
-
-        function getBalance() {
-            var from = account;
-            var value = "0";
-            var nonce = "0";
-            var gas_price = "1000000";
-            var gas_limit = "2000000";
-            var callFunction = "balanceOf";
-            var callArgs = "[\"" + from + "\"]";
-            var contract = {
-                "function": callFunction,
-                "args": callArgs
-            };
-
-            function balanceSearch(resp) {
-                var result = resp.result;
-                if (result) {
-                    try {
-                        result = JSON.parse(result)
-                    } catch (err) {
-                        alert("智能合约返回数据异常！");
-                    }
-                    var balance = Utils.toBigNumber(result).div(Utils.toBigNumber(10).pow(8));
-                    document.querySelector(".sitBalance").innerText = balance.toString(10);
-
-                } else {
-                    alert("查询账户地址用户名异常！");
-                }
-            }
-
-            if (testNet) {
-                testNeb.api.call(from, testDappAddress, value, nonce, gas_price, gas_limit, contract).then(function (resp) {
-                    balanceSearch(resp)
-                }).catch(function (err) {
-                    alert("出错了：" + err);
-                })
-            } else {
-                neb.api.call(from, testDappAddress, value, nonce, gas_price, gas_limit, contract).then(function (resp) {
-                    balanceSearch(resp)
-                }).catch(function (err) {
-                    alert("出错了：" + err);
-                })
-            }
-        }
-
-        function compare(a, b) {
-            // Use toUpperCase() to ignore character casing
-            var scoreA = a.score;
-            var scoreB = b.score;
-
-            var comparison = 0;
-            if (scoreA > scoreB) {
-                comparison = -1;
-            } else if (scoreA < scoreB) {
-                comparison = 1;
-            }
-            return comparison;
-        }
+      }, 1000)
 
     }
+
+    document.querySelector("#adBtn").addEventListener("click", function () {
+      document.querySelector(".tips").style.display = "block";
+      var date = document.getElementById("date").value;
+      var content = document.getElementById("content").value;
+      if (!date) {
+        alert("请先选择广告投放日期！");
+        return;
+      }
+      if (!content) {
+        alert("请输入广告内容！");
+        return;
+      }
+      var to = testDappAddress;
+      var value = "0";
+      var callFunction = "saveAd";
+      var callArgs = "[\"" + content + "\",\"" + date + "\"]";
+      if (testNet) {
+        to = testDappAddress;
+      } else {
+        to = testDappAddress;
+      }
+      nebPay.call(to, value, callFunction, callArgs, {
+        listener: cbPush
+      });
+
+      internal = window.setInterval(function () {
+
+        if (testNet) {
+          getTransactionReceipt(testNeb);
+        } else {
+          getTransactionReceipt(neb);
+        }
+      }, 10000)
+    })
+
+    function cbPush(resp) {
+      txhash = resp.txhash;
+    }
+    function getDate() {
+      var date = new Date();
+      var seperator1 = "-";
+      var year = date.getFullYear();
+      var month = date.getMonth() + 1;
+      var strDate = date.getDate();
+      if (month >= 1 && month <= 9) {
+        month = "0" + month;
+      }
+      if (strDate >= 0 && strDate <= 9) {
+        strDate = "0" + strDate;
+      }
+      var currentdate = year + seperator1 + month + seperator1 + strDate;
+      return currentdate;
+    }
+    function getAd() {
+      var from = account;
+      var value = "0";
+      var nonce = "0";
+      var gas_price = "1000000";
+      var gas_limit = "2000000";
+      var date = getDate();
+      var callFunction = "getAd";
+      var callArgs = "[\"" + date + "\"]";
+      var contract = {
+        "function": callFunction,
+        "args": callArgs
+      };
+
+      function adSearch(resp) {
+        var result = resp.result;
+        if (result) {
+          try {
+            result = JSON.parse(result)
+          } catch (err) {
+            alert("智能合约返回数据异常！");
+          }
+
+          if (result) {
+            document.querySelector(".words").innerText = result;
+          }
+        } else {
+          alert("查询广告异常！");
+        }
+      }
+
+      if (testNet) {
+        testNeb.api.call(from, testDappAddress, value, nonce, gas_price, gas_limit, contract).then(function (resp) {
+          adSearch(resp)
+        }).catch(function (err) {
+          alert("出错了：" + err);
+        })
+      } else {
+        neb.api.call(from, testDappAddress, value, nonce, gas_price, gas_limit, contract).then(function (resp) {
+          adSearch(resp)
+        }).catch(function (err) {
+          alert("出错了：" + err);
+        })
+      }
+    }
+    function getTransactionReceipt(neb, newName) {
+
+      neb.api.getTransactionReceipt(txhash)
+        .then(function (resp) {
+          if (resp && resp.status == 1) {
+            txhash = null;
+            window.clearInterval(internal);
+            document.querySelector(".tips").style.display = "none";
+            alert("购买广告成功");
+            getBalance();
+          }
+        })
+        .catch(function (err) {
+          txhash = null;
+          document.querySelector(".tips").style.display = "none";
+          window.clearInterval(internal);
+          alert("出错了：" + err);
+        });
+    }
+
+
+    function getName() {
+      var from = account;
+      var value = "0";
+      var nonce = "0";
+      var gas_price = "1000000";
+      var gas_limit = "2000000";
+      var callFunction = "get";
+      var callArgs = ""; //in the form of ["args"]
+      var contract = {
+        "function": callFunction,
+        "args": callArgs
+      };
+
+      function cbSearch(resp) {
+        var result = resp.result;
+        if (result) {
+          try {
+            result = JSON.parse(result)
+          } catch (err) {
+            alert("智能合约返回数据异常！");
+          }
+
+          if (result) {
+            document.querySelector(".user").innerText = result.name;
+          } else {
+            document.querySelector(".user").innerText = '匿名用户';
+          }
+        } else {
+          alert("查询账户地址用户名异常！");
+        }
+      }
+
+      if (testNet) {
+        testNeb.api.call(from, testDappAddress, value, nonce, gas_price, gas_limit, contract).then(function (resp) {
+          cbSearch(resp)
+        }).catch(function (err) {
+          alert("出错了：" + err);
+        })
+      } else {
+        neb.api.call(from, testDappAddress, value, nonce, gas_price, gas_limit, contract).then(function (resp) {
+          cbSearch(resp)
+        }).catch(function (err) {
+          alert("出错了：" + err);
+        })
+      }
+    }
+
+    function getBalance() {
+      var from = account;
+      var value = "0";
+      var nonce = "0";
+      var gas_price = "1000000";
+      var gas_limit = "2000000";
+      var callFunction = "balanceOf";
+      var callArgs = "[\"" + from + "\"]";
+      var contract = {
+        "function": callFunction,
+        "args": callArgs
+      };
+
+      function balanceSearch(resp) {
+        var result = resp.result;
+        if (result) {
+          try {
+            result = JSON.parse(result)
+          } catch (err) {
+            alert("智能合约返回数据异常！");
+          }
+          var balance = Utils.toBigNumber(result).div(Utils.toBigNumber(10).pow(8));
+          document.querySelector(".sitBalance").innerText = balance.toString(10);
+
+        } else {
+          alert("查询账户地址用户名异常！");
+        }
+      }
+
+      if (testNet) {
+        testNeb.api.call(from, testDappAddress, value, nonce, gas_price, gas_limit, contract).then(function (resp) {
+          balanceSearch(resp)
+        }).catch(function (err) {
+          alert("出错了：" + err);
+        })
+      } else {
+        neb.api.call(from, testDappAddress, value, nonce, gas_price, gas_limit, contract).then(function (resp) {
+          balanceSearch(resp)
+        }).catch(function (err) {
+          alert("出错了：" + err);
+        })
+      }
+    }
+
+    function compare(a, b) {
+      // Use toUpperCase() to ignore character casing
+      var scoreA = a.score;
+      var scoreB = b.score;
+
+      var comparison = 0;
+      if (scoreA > scoreB) {
+        comparison = -1;
+      } else if (scoreA < scoreB) {
+        comparison = 1;
+      }
+      return comparison;
+    }
+
+  }
 </script>
 </body>
 </html>

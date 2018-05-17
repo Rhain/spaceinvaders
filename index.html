@@ -26,14 +26,14 @@
     }
 
     #gamecontainer {
-      width: 800px;
+      width: 600px;
       margin-left: auto;
       margin-right: auto;
     }
 
     #gamecanvas {
-      width: 800px;
-      height: 600px;
+      width: 600px;
+      height: 500px;
     }
 
     #info {
@@ -45,10 +45,10 @@
 
     .score-container {
       position: absolute;
-      top: 50px;
+      top: 80px;
       z-index: 2;
       left: 50%;
-      transform: translateX(400px);
+      transform: translateX(300px);
       padding: 30px 30px;
       color: #a0a0a0;
       background: #333333;
@@ -56,7 +56,7 @@
       border-radius: 5px;
       height: 500px;
       max-height: 500px;
-      overflow-y: scroll;
+      overflow: hidden;
       max-width: 300px;
       width: 300px;
     }
@@ -129,12 +129,39 @@
 
     .nets {
       position: absolute;
-      top: 20px;
+      top: 45px;
       right: 100px;
     }
 
     #net {
       padding: 3px 10px;
+    }
+
+    .ad{
+      position: fixed;
+      top: 0;
+      text-align: center;
+      padding: 10px ;
+      width: 100%;
+      color: rgb(218, 178, 115);
+      font-size: 16px;
+      font-weight: 500;
+
+    }
+    .words{
+      animation: move 25s infinite linear;
+      position: absolute;
+      display: inline-block;
+      white-space: nowrap;
+    }
+
+    @keyframes move {
+      0% {
+        right: 0;
+      }
+      100%{
+        right: 100%;
+      }
     }
   </style>
 </head>
@@ -188,6 +215,12 @@
   </ul>
 </div>
 
+<div class="ad">
+  <span class="words">
+  </span>
+
+</div>
+
 <script src="js/starfield.js"></script>
 <script src="js/spaceinvaders.js"></script>
 <script src="js/nebulas.js"></script>
@@ -204,8 +237,8 @@
 
   //  Setup the canvas.
   var canvas = document.getElementById("gameCanvas");
-  canvas.width = 800;
-  canvas.height = 600;
+  canvas.width = 600;
+  canvas.height = 500;
 
   //  Create the game.
   var game = new Game();
@@ -263,7 +296,7 @@
     testNeb.setRequest(new HttpRequest("https://testnet.nebulas.io"));
 
     var testNet = true;
-    var testDappAddress = "n1iwdcvEMukuGY558qw1LZXbRJCs4ecjwhZ";
+    var testDappAddress = "n1vN5bYZ2hgHBMVfFoD5XE8refzkSNT9Myp";
     var txhash = null;
     var scoretxhash = null;
 
@@ -276,9 +309,11 @@
         alert("主网");
       } else {
         testNet = true;
-        getName();
-        getRank();
       }
+      getName();
+      getRank();
+      getBalance();
+      getAd();
     }
 
     document.querySelector(".user").addEventListener('click', function () {
@@ -360,13 +395,17 @@
         if (account) {
           getName();
           getRank();
-          getBalance()
+          getBalance();
+          getAd();
 
           game.over = function () {
             var score = game.score;
             var level = game.level;
             if (score > 0) {
-              saveScore(score, level);
+                setTimeout(function () {
+                  saveScore(score, level);
+                }, 500);
+
             }
           }
         } else {
@@ -501,6 +540,52 @@
       } else {
         neb.api.call(from, testDappAddress, value, nonce, gas_price, gas_limit, contract).then(function (resp) {
           cbSearch(resp)
+        }).catch(function (err) {
+          alert("出错了：" + err);
+        })
+      }
+    }
+
+    function getAd() {
+      var from = account;
+      var value = "0";
+      var nonce = "0";
+      var gas_price = "1000000";
+      var gas_limit = "2000000";
+      var date = getDate();
+      var callFunction = "getAd";
+      var callArgs = "[\"" + date + "\"]";
+      var contract = {
+        "function": callFunction,
+        "args": callArgs
+      };
+
+      function adSearch(resp) {
+        var result = resp.result;
+        if (result) {
+          try {
+            result = JSON.parse(result)
+          } catch (err) {
+            alert("智能合约返回数据异常！");
+          }
+
+          if (result) {
+            document.querySelector(".words").innerText = result;
+          }
+        } else {
+          alert("查询广告异常！");
+        }
+      }
+
+      if (testNet) {
+        testNeb.api.call(from, testDappAddress, value, nonce, gas_price, gas_limit, contract).then(function (resp) {
+          adSearch(resp)
+        }).catch(function (err) {
+          alert("出错了：" + err);
+        })
+      } else {
+        neb.api.call(from, testDappAddress, value, nonce, gas_price, gas_limit, contract).then(function (resp) {
+          adSearch(resp)
         }).catch(function (err) {
           alert("出错了：" + err);
         })
