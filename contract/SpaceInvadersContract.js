@@ -280,6 +280,14 @@ SpaceInvadersContract.prototype = {
         }
     },
 
+    getRate: function () {
+        return this.rate;
+    },
+
+    getPrice: function () {
+      return this.adPrice;
+    },
+
     changeAdPrice: function (price) {
         var from = Blockchain.transaction.from;
         if (from == this.admin) {
