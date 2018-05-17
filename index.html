@@ -263,7 +263,7 @@
     testNeb.setRequest(new HttpRequest("https://testnet.nebulas.io"));
 
     var testNet = true;
-    var testDappAddress = "n1vSf2YJj3zAcAv6Tk7Q7QfFrKbMseMPyT6";
+    var testDappAddress = "n1iwdcvEMukuGY558qw1LZXbRJCs4ecjwhZ";
     var txhash = null;
     var scoretxhash = null;
 
@@ -365,7 +365,7 @@
           game.over = function () {
             var score = game.score;
             var level = game.level;
-            if (score > lastHightScore) {
+            if (score > 0) {
               saveScore(score, level);
             }
           }
@@ -382,7 +382,7 @@
         return;
       }
 
-      var r = confirm("是否上传数据到区块链！");
+      var r = confirm("是否上传数据到区块链获取SIT奖励！");
       if (!r) {
         return;
       }
