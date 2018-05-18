@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <title>太空侵略者</title>
+  <title>太空侵略者-玩游戏赢SIT</title>
   <meta charset="UTF-8">
   <link rel="stylesheet" type="text/css" href="css/core.css">
   <link rel="stylesheet" type="text/css" href="css/typeography.css">
@@ -192,12 +192,7 @@
         </span>
     <span class="highestScore">
         </span>
-    <p>
-      SIT 余额：
-      <span class="sitBalance">
-            0
-          </span>
-    </p>
+
     <p id="nameChange">
       <input type="text" id="username" name="username"/>
       <button id="nameBtn">确定</button>
@@ -205,6 +200,12 @@
     </p>
 
   </h3>
+  <p style="color: #ffffff; margin-bottom: 5px">
+    SIT 余额：
+    <span class="sitBalance">
+            0
+          </span>
+  </p>
   <p>最佳排名：</p>
   <ul class="rank">
     <li>
@@ -295,8 +296,9 @@
     var testNeb = new Neb();
     testNeb.setRequest(new HttpRequest("https://testnet.nebulas.io"));
 
-    var testNet = true;
+    var testNet = false;
     var testDappAddress = "n1vN5bYZ2hgHBMVfFoD5XE8refzkSNT9Myp";
+    var dappAddress = "n1qhR9USU7wkTCPHmGLfEBVm2uPb35D6fBp";
     var txhash = null;
     var scoretxhash = null;
 
@@ -306,7 +308,7 @@
     window.chooseNet = function () {
       var net = document.getElementById("net").value;
       if (net == '1') {
-        alert("主网");
+        testNet = false;
       } else {
         testNet = true;
       }
@@ -335,14 +337,14 @@
         return;
       }
       var newName = document.getElementById("username").value;
-      var to = testDappAddress;
+      var to = dappAddress;
       var value = "0";
       var callFunction = "changeUsername";
       var callArgs = "[\"" + newName + "\"]";
       if (testNet) {
         to = testDappAddress;
       } else {
-        to = testDappAddress;
+        to = dappAddress;
       }
       nebPay.call(to, value, callFunction, callArgs, {
         listener: cbPush
@@ -426,7 +428,7 @@
         return;
       }
 
-      var to = testDappAddress;
+      var to = dappAddress;
       var value = "0";
       var callFunction = "score"
       var date = getDate();
@@ -434,7 +436,7 @@
       if (testNet) {
         to = testDappAddress;
       } else {
-        to = testDappAddress;
+        to = dappAddress;
       }
       nebPay.call(to, value, callFunction, callArgs, {
         listener: scorePush
@@ -538,7 +540,7 @@
           alert("出错了：" + err);
         })
       } else {
-        neb.api.call(from, testDappAddress, value, nonce, gas_price, gas_limit, contract).then(function (resp) {
+        neb.api.call(from, dappAddress, value, nonce, gas_price, gas_limit, contract).then(function (resp) {
           cbSearch(resp)
         }).catch(function (err) {
           alert("出错了：" + err);
@@ -584,7 +586,7 @@
           alert("出错了：" + err);
         })
       } else {
-        neb.api.call(from, testDappAddress, value, nonce, gas_price, gas_limit, contract).then(function (resp) {
+        neb.api.call(from, dappAddress, value, nonce, gas_price, gas_limit, contract).then(function (resp) {
           adSearch(resp)
         }).catch(function (err) {
           alert("出错了：" + err);
@@ -628,7 +630,7 @@
           alert("出错了：" + err);
         })
       } else {
-        neb.api.call(from, testDappAddress, value, nonce, gas_price, gas_limit, contract).then(function (resp) {
+        neb.api.call(from, dappAddress, value, nonce, gas_price, gas_limit, contract).then(function (resp) {
           balanceSearch(resp)
         }).catch(function (err) {
           alert("出错了：" + err);
@@ -656,8 +658,7 @@
             result = JSON.parse(result)
             var invaders = result.invaders;
             invaders.sort(compare);
-            invaders.slice(0, 2);
-            console.log(invaders)
+            invaders.slice(0, 10);
             if (invaders && invaders.length > 0) {
               var r = "";
               for (var i = 0; i < invaders.length; i++) {
@@ -692,7 +693,7 @@
           alert("出错了：" + err);
         })
       } else {
-        neb.api.call(from, testDappAddress, value, nonce, gas_price, gas_limit, contract).then(function (resp) {
+        neb.api.call(from, dappAddress, value, nonce, gas_price, gas_limit, contract).then(function (resp) {
           querySearch(resp)
         }).catch(function (err) {
           alert("出错了：" + err);

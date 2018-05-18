@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <title>购买广告-太空侵略者</title>
+  <title>购买广告-太空侵略者-玩游戏赢SIT</title>
   <meta charset="UTF-8">
   <link rel="stylesheet" type="text/css" href="css/core.css">
   <link rel="stylesheet" type="text/css" href="css/typeography.css">
@@ -60,7 +60,7 @@
       top: 80px;
       z-index: 2;
       left: 50%;
-      transform: translateX(400px);
+      transform: translateX(300px);
       padding: 10px 30px;
       color: #a0a0a0;
       background: #333333;
@@ -104,7 +104,7 @@
 
     #adBtn {
       float: right;
-      margin-right: 45px;
+      margin-right: 55px;
       cursor: pointer;
     }
     .ad{
@@ -161,6 +161,7 @@
     <textarea name="content" id="content" cols="60" rows="10"></textarea>
   </p>
   <p>
+    <span>100 SIT可购买一天的广告</span>
     <button type="button" id="adBtn">确认</button>
   </p>
 </div>
@@ -177,14 +178,13 @@
   <h3>
         <span class="user">
         </span>
-    <p>
-      SIT 余额：
-      <span class="sitBalance">
+  </h3>
+  <p>
+    SIT 余额：
+    <span class="sitBalance">
             0
           </span>
-    </p>
-  </h3>
-
+  </p>
 </div>
 <div id="info">
   <p>联系我：QQ：3326712209 | <a href="/spaceinvaders/index.html"> 首页</a> | <a href="/spaceinvaders/about.html">关于</a></p>
@@ -238,13 +238,14 @@
     var testNeb = new Neb();
     testNeb.setRequest(new HttpRequest("https://testnet.nebulas.io"));
 
-    var testNet = true;
+    var testNet = false;
     var testDappAddress = "n1vN5bYZ2hgHBMVfFoD5XE8refzkSNT9Myp";
+    var dappAddress = "n1qhR9USU7wkTCPHmGLfEBVm2uPb35D6fBp";
 
     window.chooseNet = function () {
       var net = document.getElementById("net").value;
       if (net == '1') {
-        alert("主网");
+        testNet = false;
       } else {
         testNet = true;
       }
@@ -281,14 +282,14 @@
         alert("请输入广告内容！");
         return;
       }
-      var to = testDappAddress;
+      var to = dappAddress;
       var value = "0";
       var callFunction = "saveAd";
       var callArgs = "[\"" + content + "\",\"" + date + "\"]";
       if (testNet) {
         to = testDappAddress;
       } else {
-        to = testDappAddress;
+        to = dappAddress;
       }
       nebPay.call(to, value, callFunction, callArgs, {
         listener: cbPush
@@ -360,7 +361,7 @@
           alert("出错了：" + err);
         })
       } else {
-        neb.api.call(from, testDappAddress, value, nonce, gas_price, gas_limit, contract).then(function (resp) {
+        neb.api.call(from, dappAddress, value, nonce, gas_price, gas_limit, contract).then(function (resp) {
           adSearch(resp)
         }).catch(function (err) {
           alert("出错了：" + err);
@@ -427,7 +428,7 @@
           alert("出错了：" + err);
         })
       } else {
-        neb.api.call(from, testDappAddress, value, nonce, gas_price, gas_limit, contract).then(function (resp) {
+        neb.api.call(from, dappAddress, value, nonce, gas_price, gas_limit, contract).then(function (resp) {
           cbSearch(resp)
         }).catch(function (err) {
           alert("出错了：" + err);
@@ -471,7 +472,7 @@
           alert("出错了：" + err);
         })
       } else {
-        neb.api.call(from, testDappAddress, value, nonce, gas_price, gas_limit, contract).then(function (resp) {
+        neb.api.call(from, dappAddress, value, nonce, gas_price, gas_limit, contract).then(function (resp) {
           balanceSearch(resp)
         }).catch(function (err) {
           alert("出错了：" + err);
