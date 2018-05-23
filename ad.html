@@ -389,6 +389,11 @@
             document.querySelector(".tips").style.display = "none";
             alert("购买广告成功");
             getBalance();
+          }else if(resp.status == 0 && resp.execute_error){
+            alert("异常：" + resp.execute_error);
+              txhash = null;
+              window.clearInterval(internal);
+              document.querySelector(".tips").style.display = "none";
           }
         })
         .catch(function (err) {
