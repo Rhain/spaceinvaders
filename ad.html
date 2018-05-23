@@ -88,7 +88,7 @@
     .tips {
       position: absolute;
       color: #7bd075;
-      top: 15px;
+      top: 5px;
       display: none;
     }
 
@@ -302,11 +302,19 @@
         } else {
           getTransactionReceipt(neb);
         }
-      }, 10000)
+      }, 15000)
     })
 
     function cbPush(resp) {
-      txhash = resp.txhash;
+        if(typeof resp == 'string'){
+            txhash = null;
+            window.clearInterval(internal);
+            document.querySelector(".tips").style.display = "none";
+            alert("您取消了购买广告！");
+        }else{
+            txhash = resp.txhash;
+        }
+
     }
     function getDate() {
       var date = new Date();
@@ -368,7 +376,10 @@
         })
       }
     }
-    function getTransactionReceipt(neb, newName) {
+    function getTransactionReceipt(neb) {
+        if(!txhash){
+            return;
+        }
 
       neb.api.getTransactionReceipt(txhash)
         .then(function (resp) {

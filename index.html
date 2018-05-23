@@ -357,11 +357,14 @@
         } else {
           getTransactionReceipt(neb, newName);
         }
-      }, 10000)
+      }, 15000)
 
     });
 
     function getTransactionReceipt(neb, newName) {
+        if(!txhash){
+            return;
+        }
 
       neb.api.getTransactionReceipt(txhash)
         .then(function (resp) {
@@ -386,8 +389,16 @@
     }
 
     function cbPush(resp) {
-      document.querySelector(".tips").style.display = "block";
-      txhash = resp.txhash;
+        document.querySelector(".tips").style.display = "block";
+        if(typeof resp == 'string'){
+            txhash = null;
+            document.querySelector(".tips").style.display = "none";
+            window.clearInterval(internal);
+            alert("您取消了命名操作！");
+        }else {
+            txhash = resp.txhash;
+        }
+
     }
 
     if (typeof(webExtensionWallet) === "undefined") {
@@ -449,10 +460,13 @@
         } else {
           getScoreTransactionReceipt(neb, score);
         }
-      }, 10000)
+      }, 15000)
     }
 
     function getScoreTransactionReceipt(neb, score) {
+        if(!scoretxhash){
+            return;
+        }
 
       neb.api.getTransactionReceipt(scoretxhash)
         .then(function (resp) {
@@ -479,7 +493,15 @@
 
     function scorePush(resp) {
       document.querySelector(".tips").style.display = "block";
-      scoretxhash = resp.txhash;
+        if(typeof resp == 'string'){
+            scoretxhash = null;
+            window.clearInterval(sinternal);
+            document.querySelector(".tips").style.display = "none";
+            alert("您取消了记录分数！");
+        }else {
+            scoretxhash = resp.txhash;
+        }
+
     }
 
     function getDate() {
