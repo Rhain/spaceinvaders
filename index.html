@@ -680,7 +680,7 @@
             result = JSON.parse(result)
             var invaders = result.invaders;
             invaders.sort(compare);
-            invaders.slice(0, 10);
+            invaders = invaders.slice(0, 10);
             if (invaders && invaders.length > 0) {
               var r = "";
               for (var i = 0; i < invaders.length; i++) {
